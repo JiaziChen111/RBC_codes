@@ -76,11 +76,11 @@ end	# type
 # a show method
 function show(io::IO, m::Model)
     print(io, "RBC Model object\n")
-    print(io, "Capital grid points = $m.nGridCapital\n")
-    print(io, "Productivity grid points = $m.nGridProductivity\n")
-    print(io, "Output = $m.outputSteadyState\n")
-    print(io, "Capital = $m.capitalSteadyState\n")
-    print(io, "Consumption = $m.consumptionSteadyState\n")
+    print(io, "Capital grid points = $(m.nGridCapital)\n")
+    print(io, "Productivity grid points = $(m.nGridProductivity)\n")
+    print(io, "Output = $(m.outputSteadyState)\n")
+    print(io, "Capital = $(m.capitalSteadyState)\n")
+    print(io, "Consumption = $(m.consumptionSteadyState)\n")
 end
 
 

@@ -10,6 +10,7 @@ include("RBCmodule.jl")
 
 # build model
 m = RBCmod.Model();
+show(m)
 
 # force compilation
 RBCmod.compute(m)
