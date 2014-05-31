@@ -1,7 +1,21 @@
 
 # Git Repo accompanying "A Comparison of Programming Languages in Economics" by Jesus Fernandez-Villaverde and S. Boragan Aruoba
 
-Notice that this repo is (for now) run without knowledge or approval of the authors. I just set this up to better tweek the code. Here is their original readme file:
+Notice that this repo is (for now) run without knowledge or approval of the authors. I just set this up to better tweek the code. 
+
+
+## My results
+
+I focused on typing the Julia code. I saw that the REPL spends a lot of time inferring types. 
+
+* I achieve a speedup of 18% by typing the model before executing the computation function. 
+* I obtain a speedup of 24% with respect to the original code by using linear indices and by switching off bounds checking.
+
+In order to run my code execute line by line `RBC_codes/julia/main.jl`
+
+
+
+# Here is their original readme file:
 
 
 Files:

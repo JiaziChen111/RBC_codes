@@ -9,7 +9,7 @@ function main()
 
     ##  1. Calibration
 
-    Float64 aalpha = 1/3     # Elasticity of output w.r.t. capital
+    aalpha = 1/3     # Elasticity of output w.r.t. capital
     bbeta  = 0.95    # Discount factor
 
     # Productivity values
