@@ -1,7 +1,7 @@
 
 # Git Repo accompanying "A Comparison of Programming Languages in Economics" by Jesus Fernandez-Villaverde and S. Boragan Aruoba
 
-Notice that this repo is (for now) run without knowledge or approval of the authors. I just set this up to better tweek the code. 
+Notice that this repo is (for now) run without knowledge or approval of the authors. I just set this up to better tweek the code. [http://economics.sas.upenn.edu/~jesusfv/comparison_languages.pdf](Link to the paper.)
 
 
 ## My results
