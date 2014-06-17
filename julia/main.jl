@@ -47,6 +47,18 @@ RBCmod.computeTuned(m)
 RBCmod.resetV!(m);
 Tuned = @elapsed RBCmod.computeTuned(m)
 
+# mylog and devectorizing maximum(abs)
+RBCmod.resetV!(m);
+RBCmod.computeTuned2(m)
+RBCmod.resetV!(m);
+Tuned_mylog = @elapsed RBCmod.computeTuned2(m)
+
+print((Tuned_mylog - Tuned) / Tuned)
+
+
+
 
 println("% time difference typed vs Jesus: $((withTypes - noTypes) / noTypes)")
 println("% time difference tuned vs Jesus: $((Tuned - noTypes) / noTypes)")
+println("% time difference tuned vs tuned_mylog: $((Tuned_mylog - Tuned) / Tuned)")
+println("% time difference tuned vs Jesus: $((Tuned_mylog - noTypes) / noTypes)")

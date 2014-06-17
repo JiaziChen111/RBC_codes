@@ -28,6 +28,7 @@ type Model
 	expectedValueFunction :: Array{Float64,2}
 
 
+
 	# constructor
 	function Model()
 
@@ -65,6 +66,7 @@ type Model
 	    # 4. We pre-build output for each point in the grid
 
 	    mOutput = (vGridCapital.^aalpha).*vProductivity';
+
 
 	    # return a model
 	    return new(aalpha,bbeta,vProductivity,mTransition,capitalSteadyState,outputSteadyState,consumptionSteadyState,vGridCapital,nGridCapital,nGridProductivity,mOutput,mValueFunction,mValueFunctionNew,mPolicyFunction,expectedValueFunction) 
@@ -222,6 +224,82 @@ function computeTuned(m::Model)
 	end # inbounds
 end
 
+# a slightly tuned computation function
+# uses linear indices [i + ni * (j-1)] instead of array access[i,j]
+# switches off bound checking
+function computeTuned2(m::Model)
+
+
+    # pre-allocate some temps
+    maxDifference         = 10.0
+    tolerance             = 0.0000001
+    iteration             = 0
+    valueHighSoFar        = -1000.0
+    capitalChoice         = m.vGridCapital[1]
+    gridCapitalNextPeriod = 1
+    consumption           = 0.0
+    valueProvisional      = 0.0
+    oneminusbeta          = 1-m.bbeta
+
+
+    # main loop
+    while(maxDifference > tolerance)
+
+        m.expectedValueFunction = m.mValueFunction * m.mTransition'
+
+        for nProductivity = 1:m.nGridProductivity
+
+            # We start from previous choice (monotonicity of policy function)
+            gridCapitalNextPeriod = 1
+        
+            for nCapital = 1:m.nGridCapital
+        
+                valueHighSoFar = -1000.0
+                capitalChoice  = m.vGridCapital[1]
+            
+                for nCapitalNextPeriod = gridCapitalNextPeriod:m.nGridCapital
+
+                    @inbounds consumption = m.mOutput[nCapital,nProductivity]-m.vGridCapital[nCapitalNextPeriod]
+                   @inbounds valueProvisional = oneminusbeta*mylog(consumption)+m.bbeta*m.expectedValueFunction[nCapitalNextPeriod + m.nGridCapital * (nProductivity-1)]
+               
+                    if (valueProvisional>valueHighSoFar)
+                        valueHighSoFar = valueProvisional
+                        capitalChoice = m.vGridCapital[nCapitalNextPeriod]
+                        gridCapitalNextPeriod = nCapitalNextPeriod
+                    else
+                        break # We break when we have achieved the max
+                    end
+                                 
+                end
+            
+                m.mValueFunctionNew[nCapital + m.nGridCapital * (nProductivity-1)] = valueHighSoFar
+                m.mPolicyFunction[nCapital + m.nGridCapital * (nProductivity-1)] = capitalChoice
+          
+            end
+
+        end
+
+        tmp1 = 0.0
+        tmp2 = 0.0
+        for i in 1:length(m.mValueFunctionNew)
+            tmp1 = abs(m.mValueFunctionNew[i] - m.mValueFunction[i])
+            if tmp1 > tmp2
+                tmp2 = tmp1
+            end
+        end
+        maxDifference = tmp2
+
+        m.mValueFunction    = copy(m.mValueFunctionNew)
+        fill!(m.mValueFunctionNew,0.0)
+
+        iteration = iteration+1
+        if mod(iteration,10)==0 || iteration == 1
+            println(" Iteration = ", iteration, " Sup Diff = ", maxDifference)
+        end
+           
+    end
+    # end # inbounds
+end
 # reset ValueFucntino method
 function resetV!(m::Model)
 	fill!(m.mValueFunction,0.0)
